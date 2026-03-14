@@ -1,0 +1,36 @@
+name: Build Plugin
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/custom-pip-actions
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npx tsc --skipLibCheck
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: expo-pip-build
+          path: |
+            plugin/build/
+            build/
+            src/
+            android/
+            ios/
+            app.plugin.js
+            package.json
+            index.js
